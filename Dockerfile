@@ -4,13 +4,13 @@ FROM golang:1.11
 # add a non-privileged user
 RUN useradd -u 10001 myapp
 
-RUN mkdir -p /go/src/github.com/rumyantseva/nsk
-ADD . /go/src/github.com/rumyantseva/nsk
-WORKDIR /go/src/github.com/rumyantseva/nsk
+RUN mkdir -p /go/src/github.com/GiDiS/nsk
+ADD . /go/src/github.com/GiDiS/nsk
+WORKDIR /go/src/github.com/GiDiS/nsk
 
 # build the binary with go build
 RUN CGO_ENABLED=0 go build \
-	-o bin/nsk github.com/rumyantseva/nsk/cmd/nsk
+	-o bin/nsk github.com/GiDiS/nsk/cmd/nsk
 
 # Stage 2. Run the binary
 FROM scratch
@@ -22,7 +22,7 @@ COPY --from=0 /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=0 /etc/passwd /etc/passwd
 USER myapp
 
-COPY --from=0 /go/src/github.com/rumyantseva/nsk/bin/nsk /nsk
+COPY --from=0 /go/src/github.com/GiDiS/nsk/bin/nsk /nsk
 EXPOSE $PORT
 
 CMD ["/nsk"]
